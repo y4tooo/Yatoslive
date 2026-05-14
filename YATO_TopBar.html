@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=560">
+<title>YATO Top Bar</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Orbitron:wght@700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html, body {
+  width: 560px;
+  height: 110px;
+  overflow: hidden;
+  background: transparent;
+}
+
+/* ── WRAPPER ── */
+.bar {
+  position: relative;
+  width: 560px;
+  height: 110px;
+  background: #000;
+  overflow: hidden;
+  animation: slideDown .55s cubic-bezier(.22,1,.36,1) both;
+}
+
+/* diagonal stripe texture */
+.bar::before {
+  content:'';
+  position:absolute; inset:0;
+  background: repeating-linear-gradient(
+    -50deg,
+    transparent 0, transparent 20px,
+    rgba(201,168,76,0.04) 20px, rgba(201,168,76,0.04) 21px
+  );
+  pointer-events:none; z-index:0;
+}
+
+/* ── ANIMATED GOLD BOTTOM BORDER ── */
+.border-line {
+  position:absolute;
+  bottom:0; left:0; right:0;
+  height:3px;
+  background: linear-gradient(90deg, #5A4418, #FFD966 50%, #5A4418);
+  overflow:hidden;
+  z-index:10;
+}
+.border-line::after {
+  content:'';
+  position:absolute; inset:0; width:35%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent);
+  animation: sweep 2.8s ease-in-out infinite;
+}
+
+/* ── INNER LAYOUT ── */
+.inner {
+  position:absolute;
+  inset: 0 0 3px 0;
+  display:flex;
+  align-items:center;
+  padding: 0 22px;
+  gap: 0;
+  z-index:5;
+}
+
+/* ── LIVE PILL ── */
+.live {
+  display:flex; align-items:center; gap:8px;
+  background:#FF3333;
+  border-radius:4px;
+  padding: 6px 14px 6px 11px;
+  flex-shrink:0;
+  position:relative;
+  overflow:hidden;
+}
+/* shimmer on live pill */
+.live::after {
+  content:'';
+  position:absolute; top:0; left:-100%; width:60%; height:100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  animation: sweep 3s ease-in-out infinite 1s;
+}
+.dot {
+  width:11px; height:11px;
+  background:#fff; border-radius:50%;
+  animation: blink 1.1s ease-in-out infinite;
+}
+.live-txt {
+  font-family:'Orbitron',monospace;
+  font-size:15px; font-weight:900;
+  letter-spacing:3px; color:#fff;
+}
+
+/* ── DIVIDER ── */
+.div {
+  width:2px; height:60px;
+  background: linear-gradient(180deg, transparent, #C9A84C 35%, #C9A84C 65%, transparent);
+  margin: 0 20px; flex-shrink:0;
+}
+
+/* ── CHANNEL BLOCK ── */
+.ch { display:flex; flex-direction:column; flex-shrink:0; }
+.ch-name {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:62px; letter-spacing:7px;
+  color:#FFD966; line-height:1;
+  animation: namePulse 4s ease-in-out infinite;
+}
+.ch-handle {
+  font-family:'Share Tech Mono',monospace;
+  font-size:13px; color:rgba(201,168,76,0.5);
+  letter-spacing:2.5px; margin-top:1px;
+}
+
+/* ── ANIME ACCENT ART (right side) ── 
+   Pure CSS — abstract speed lines + slash marks.
+   Original design, zero copyright issues.
+*/
+.art {
+  margin-left:auto;
+  position:relative;
+  width:140px; height:80px;
+  flex-shrink:0;
+  overflow:hidden;
+}
+/* main diagonal slash */
+.art::before {
+  content:'';
+  position:absolute;
+  top:10px; left:10px; right:10px; bottom:10px;
+  border-left: 3px solid rgba(201,168,76,0.7);
+  transform: skewX(-22deg);
+  animation: slashPulse 2s ease-in-out infinite;
+}
+.slash {
+  position:absolute;
+  height:2px;
+  background: linear-gradient(90deg, transparent, #C9A84C, transparent);
+  transform-origin: left center;
+  animation: lineSlide 1.8s ease-in-out infinite;
+}
+.slash:nth-child(1){ width:80px; top:20px; left:30px; animation-delay:0s; opacity:0.8; }
+.slash:nth-child(2){ width:55px; top:35px; left:50px; animation-delay:.2s; opacity:0.5; }
+.slash:nth-child(3){ width:65px; top:50px; left:35px; animation-delay:.4s; opacity:0.65; }
+.slash:nth-child(4){ width:40px; top:62px; left:60px; animation-delay:.6s; opacity:0.35; }
+
+/* small diamond */
+.diamond {
+  position:absolute;
+  top:30px; right:18px;
+  width:14px; height:14px;
+  border:2px solid #FFD966;
+  transform: rotate(45deg);
+  animation: diamondSpin 6s linear infinite;
+}
+.diamond::after {
+  content:'';
+  position:absolute;
+  inset:3px;
+  background:#FFD966;
+  animation: diamondFill 2s ease-in-out infinite;
+}
+
+/* ── CORNER BRACKETS on bar ── */
+.corner {
+  position:absolute;
+  width:22px; height:22px;
+  pointer-events:none; z-index:20;
+}
+.corner svg { display:block; }
+.c-tl { top:0; left:0; }
+.c-tr { top:0; right:0; transform:scaleX(-1); }
+
+/* ── KEYFRAMES ── */
+@keyframes slideDown {
+  from { transform:translateY(-100%); opacity:0; }
+  to   { transform:translateY(0);     opacity:1; }
+}
+@keyframes blink {
+  0%,100%{ opacity:1; } 50%{ opacity:0.1; }
+}
+@keyframes namePulse {
+  0%,100%{ opacity:1; } 50%{ opacity:0.8; }
+}
+@keyframes sweep {
+  0%  { transform:translateX(-100%); }
+  100%{ transform:translateX(350%); }
+}
+@keyframes slashPulse {
+  0%,100%{ opacity:0.7; } 50%{ opacity:1; }
+}
+@keyframes lineSlide {
+  0%  { transform:scaleX(0) skewY(-8deg); opacity:0; }
+  30% { transform:scaleX(1) skewY(-8deg); opacity:1; }
+  70% { transform:scaleX(1) skewY(-8deg); opacity:1; }
+  100%{ transform:scaleX(0) skewY(-8deg); opacity:0; }
+}
+@keyframes diamondSpin {
+  from{ transform:rotate(45deg); }
+  to  { transform:rotate(405deg); }
+}
+@keyframes diamondFill {
+  0%,100%{ opacity:0.4; } 50%{ opacity:1; }
+}
+</style>
+</head>
+<body>
+<div class="bar">
+
+  <!-- corner brackets -->
+  <div class="corner c-tl">
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+      <path d="M0 22 L0 0 L22 0" stroke="#C9A84C" stroke-width="2.5" fill="none"/>
+    </svg>
+  </div>
+  <div class="corner c-tr">
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+      <path d="M0 22 L0 0 L22 0" stroke="#C9A84C" stroke-width="2.5" fill="none"/>
+    </svg>
+  </div>
+
+  <div class="border-line"></div>
+
+  <div class="inner">
+    <!-- LIVE -->
+    <div class="live">
+      <div class="dot"></div>
+      <span class="live-txt">LIVE</span>
+    </div>
+
+    <div class="div"></div>
+
+    <!-- Channel -->
+    <div class="ch">
+      <div class="ch-name">YATO</div>
+      <div class="ch-handle">@y4toooo</div>
+    </div>
+
+    <!-- Anime art accent -->
+    <div class="art">
+      <div class="slash"></div>
+      <div class="slash"></div>
+      <div class="slash"></div>
+      <div class="slash"></div>
+      <div class="diamond"></div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
