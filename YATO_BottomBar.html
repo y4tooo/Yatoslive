@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=560">
+<title>YATO Bottom Bar</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Orbitron:wght@700;900&family=Rajdhani:wght@600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html, body {
+  width: 560px;
+  height: 90px;
+  overflow: hidden;
+  background: transparent;
+}
+
+.bar {
+  position:relative;
+  width:560px; height:90px;
+  background:#000;
+  overflow:hidden;
+  animation: slideUp .55s cubic-bezier(.22,1,.36,1) both;
+}
+
+/* diagonal texture */
+.bar::before {
+  content:''; position:absolute; inset:0;
+  background: repeating-linear-gradient(
+    -50deg, transparent 0, transparent 20px,
+    rgba(201,168,76,0.04) 20px, rgba(201,168,76,0.04) 21px
+  );
+  pointer-events:none; z-index:0;
+}
+
+/* ── ANIMATED GOLD TOP BORDER ── */
+.border-line {
+  position:absolute;
+  top:0; left:0; right:0; height:3px;
+  background: linear-gradient(90deg, #5A4418, #FFD966 50%, #5A4418);
+  overflow:hidden; z-index:10;
+}
+.border-line::after {
+  content:''; position:absolute; inset:0; width:35%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent);
+  animation: sweep 2.8s ease-in-out infinite 1.4s;
+}
+
+/* ── INNER ROW ── */
+.inner {
+  position:absolute;
+  inset: 3px 0 0 0;
+  display:flex; align-items:center;
+  padding: 0 22px; gap:0; z-index:5;
+}
+
+/* ── W/L RECORD ── */
+.record {
+  display:flex; align-items:center; gap:8px;
+  flex-shrink:0;
+}
+.rec-label {
+  font-family:'Share Tech Mono',monospace;
+  font-size:11px; letter-spacing:3px;
+  color:rgba(201,168,76,0.45);
+  text-transform:uppercase; margin-right:4px;
+}
+.rec-num {
+  font-family:'Orbitron',monospace;
+  font-size:26px; font-weight:700;
+  letter-spacing:1px;
+}
+.w { color:#00FF41; animation: wPulse 3s ease-in-out infinite; }
+.l { color:#FF3333; animation: lPulse 3s ease-in-out infinite 1.5s; }
+.sep { color:rgba(240,237,230,0.18); font-size:20px; font-family:'Rajdhani',sans-serif; }
+
+/* ── DIVIDER ── */
+.div {
+  width:2px; height:50px;
+  background:linear-gradient(180deg, transparent, #C9A84C 35%, #C9A84C 65%, transparent);
+  margin:0 22px; flex-shrink:0;
+}
+
+/* ── YOUTUBE HANDLE ── */
+.yt-block {
+  display:flex; flex-direction:column; flex-shrink:0;
+}
+.yt-label {
+  font-family:'Share Tech Mono',monospace;
+  font-size:10px; letter-spacing:3px;
+  color:rgba(201,168,76,0.4);
+  text-transform:uppercase; margin-bottom:2px;
+}
+.yt-handle {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:28px; letter-spacing:4px;
+  color:#FFD966;
+}
+
+/* ── ANIME SPEED LINE ART (right side) ── */
+.art {
+  margin-left:auto;
+  position:relative;
+  width:130px; height:70px;
+  flex-shrink:0; overflow:hidden;
+}
+/* vertical slash accent */
+.art::before {
+  content:'';
+  position:absolute;
+  top:5px; bottom:5px; left:50%;
+  width:2px;
+  background:linear-gradient(180deg, transparent, #C9A84C 40%, #C9A84C 60%, transparent);
+  transform:skewX(-15deg);
+  animation:slashV 3s ease-in-out infinite;
+}
+.hline {
+  position:absolute;
+  width:100%; height:2px;
+  background:linear-gradient(90deg, transparent, rgba(201,168,76,0.7), transparent);
+  animation:hSlide 2s ease-in-out infinite;
+}
+.hline:nth-child(1){ top:18px; animation-delay:0s;   opacity:0.9; }
+.hline:nth-child(2){ top:32px; animation-delay:.25s; opacity:0.6; width:80%; left:10%; }
+.hline:nth-child(3){ top:46px; animation-delay:.5s;  opacity:0.75; }
+.hline:nth-child(4){ top:58px; animation-delay:.1s;  opacity:0.4; width:60%; left:20%; }
+
+/* tiny tri accent */
+.tri {
+  position:absolute;
+  top:50%; right:12px;
+  transform:translateY(-50%);
+  width:0; height:0;
+  border-left:10px solid rgba(255,217,102,0.6);
+  border-top:6px solid transparent;
+  border-bottom:6px solid transparent;
+  animation:triPulse 2s ease-in-out infinite;
+}
+
+/* ── CORNER BRACKETS ── */
+.corner { position:absolute; width:22px; height:22px; pointer-events:none; z-index:20; }
+.corner svg { display:block; }
+.c-bl { bottom:0; left:0; transform:scaleY(-1); }
+.c-br { bottom:0; right:0; transform:scale(-1); }
+
+/* ── KEYFRAMES ── */
+@keyframes slideUp {
+  from { transform:translateY(100%); opacity:0; }
+  to   { transform:translateY(0);    opacity:1; }
+}
+@keyframes sweep {
+  0%  { transform:translateX(-100%); }
+  100%{ transform:translateX(350%); }
+}
+@keyframes wPulse {
+  0%,100%{ opacity:1; } 50%{ opacity:0.65; }
+}
+@keyframes lPulse {
+  0%,100%{ opacity:1; } 50%{ opacity:0.65; }
+}
+@keyframes slashV {
+  0%,100%{ opacity:0.6; } 50%{ opacity:1; }
+}
+@keyframes hSlide {
+  0%  { transform:scaleX(0); opacity:0; transform-origin:left; }
+  35% { transform:scaleX(1); opacity:1; transform-origin:left; }
+  65% { transform:scaleX(1); opacity:1; transform-origin:right; }
+  100%{ transform:scaleX(0); opacity:0; transform-origin:right; }
+}
+@keyframes triPulse {
+  0%,100%{ opacity:0.5; transform:translateY(-50%) translateX(0); }
+  50%     { opacity:1;   transform:translateY(-50%) translateX(3px); }
+}
+</style>
+</head>
+<body>
+<div class="bar">
+
+  <!-- corners -->
+  <div class="corner c-bl">
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+      <path d="M0 22 L0 0 L22 0" stroke="#C9A84C" stroke-width="2.5" fill="none"/>
+    </svg>
+  </div>
+  <div class="corner c-br">
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+      <path d="M0 22 L0 0 L22 0" stroke="#C9A84C" stroke-width="2.5" fill="none"/>
+    </svg>
+  </div>
+
+  <div class="border-line"></div>
+
+  <div class="inner">
+    <!-- W/L -->
+    <div class="record">
+      <span class="rec-label">Record</span>
+      <span class="rec-num w">W:1</span>
+      <span class="sep">/</span>
+      <span class="rec-num l">L:0</span>
+    </div>
+
+    <div class="div"></div>
+
+    <!-- YouTube -->
+    <div class="yt-block">
+      <div class="yt-label">YouTube</div>
+      <div class="yt-handle">@y4toooo</div>
+    </div>
+
+    <!-- art -->
+    <div class="art">
+      <div class="hline"></div>
+      <div class="hline"></div>
+      <div class="hline"></div>
+      <div class="hline"></div>
+      <div class="tri"></div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
